@@ -116,6 +116,26 @@ class IndexWeb
 
     @noAuth
     @path("/*")
+    @method(HTTPMethod.POST)
+    public void del(scope HTTPServerRequest req, scope HTTPServerResponse res)
+    {
+        auto path = req.requestPath.toString();
+        auto fullpath = chainPath(filesPath, path[1..$]).array().decodeComponent();
+
+        if (isDir(fullpath))
+        {
+            rmdirRecurse(fullpath);
+        }
+        else
+        {
+            remove(fullpath);
+        }
+
+        res.redirect(dirName(path));
+    }
+
+    @noAuth
+    @path("/*")
     public void get(scope HTTPServerRequest req, scope HTTPServerResponse res)
     {
         auto path = req.requestPath.toString();

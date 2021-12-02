@@ -108,6 +108,25 @@ table tr td {
     text-align: right;
 }
 
+table .del {
+    opacity: 0;
+}
+
+table tr:hover .del {
+    opacity: 1;
+}
+
+table .del button {
+    cursor: pointer;
+    color: var(--color-red);
+    background: none;
+    border: none;
+}
+
+table .del button:hover {
+    text-decoration: underline;
+}
+
 .index a {
     display: block;
 }
@@ -125,11 +144,15 @@ table th, table td {
     color: var(--color-white);
 }
 
-.login input[type=submit] {
+.login button {
     color: var(--color-main);
     cursor: pointer;
+    border-radius: var(--border-radius);
+    background-color: var(--color-cod-gray-light);
+    border: 2px solid var(--color-mineshaft);
+    padding: 0.25em 0.5em;
 }
 
-.login input[type=submit]:hover {
+.login button:hover {
     color: var(--color-accent);
 }

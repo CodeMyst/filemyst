@@ -3,6 +3,7 @@ extends base
 block body
     - import std.format;
     - string up = "";
+    - bool del = !auth.isNull;
     - if (tree.path != "/")
         - import std.path;
         - import std.array;
@@ -15,6 +16,8 @@ block body
                         td name
                     - else
                         td: a(href=up) ../
+                    - if (del)
+                        td
                     td size
                     td last modified
             tbody
@@ -24,5 +27,9 @@ block body
                     tr
                         - const d = item.lastModified;
                         td: a(href="/" ~ item.path, class=item.isDir ? "dir" : "file") #{item.name}#{item.isDir ? "/" : ""}
+                        - if (del)
+                            td.del
+                                form(method="post", action="/" ~ item.path, onsubmit="return confirm('do you really want to delete " ~ item.name ~ "? this action cannot be undone.');")
+                                    button(type="submit") del
                         td= item.prettysize
                         td= format!("%02d-%s-%d %02d:%02d:%02d")(d.day, d.month, d.year, d.hour, d.minute, d.second)
