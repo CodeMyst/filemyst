@@ -1,0 +1,3 @@
+header
+    h1 filemyst - web file manager
+    a(href="/login") login

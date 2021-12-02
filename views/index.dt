@@ -1,0 +1,28 @@
+extends base
+
+block body
+    - import std.format;
+    - string up = "";
+    - if (tree.path != "/")
+        - import std.path;
+        - import std.array;
+        - up = chainPath(tree.path, "../").array();
+    .index
+        table
+            thead
+                tr
+                    - if (up == "")
+                        td name
+                    - else
+                        td: a(href=up) ../
+                    td size
+                    td last modified
+            tbody
+                - if (tree.subtree.length == 0)
+                    p empty directory
+                - foreach (item; tree.subtree)
+                    tr
+                        - const d = item.lastModified;
+                        td: a(href="/" ~ item.path, class=item.isDir ? "dir" : "file") #{item.name}#{item.isDir ? "/" : ""}
+                        td= item.prettysize
+                        td= format!("%02d-%s-%d %02d:%02d:%02d")(d.day, d.month, d.year, d.hour, d.minute, d.second)

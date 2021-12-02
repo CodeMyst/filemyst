@@ -1,0 +1,8 @@
+extends base
+
+block body
+    .login
+        form(action="/login", method="post")
+            label(for="password") password
+            input(type="password", name="password")
+            input(type="submit", value="login")

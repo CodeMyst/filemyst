@@ -1,0 +1,12 @@
+{
+	"authors": [
+		"codemyst"
+	],
+	"copyright": "Copyright © 2021, codemyst",
+	"dependencies": {
+		"vibe-d": "~>0.9.4"
+	},
+	"description": "Light web file manager.",
+	"license": "MIT",
+	"name": "filemyst"
+}

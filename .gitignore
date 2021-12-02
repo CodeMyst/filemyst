@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/filemyst
+filemyst.so
+filemyst.dylib
+filemyst.dll
+filemyst.a
+filemyst.lib
+filemyst-test-*
+*.exe
+*.o
+*.obj
+*.lst
