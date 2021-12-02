@@ -2,7 +2,17 @@ extends base
 
 block body
     .login
-        form(action="/login", method="post")
-            label(for="password") password
-            input(type="password", name="password")
-            input(type="submit", value="login")
+        form(method="POST", action="login")
+            div
+                label(for="username") username:
+                input#user(name="username", type="text")
+            div
+                label(for="password") password:
+                input#password(name="password", type="password")
+
+            - if (error.length)
+                - import std.string : toLower;
+                p.error= error.toLower()
+
+            div
+                button(type="sumbit") login

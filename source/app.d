@@ -1,12 +1,15 @@
 import vibe.d;
+import vibe.web.auth;
 import std.array;
 import std.stdio;
 import std.file;
 import std.path;
 import std.string;
 import std.uri;
+import std.typecons;
 
 import filetree;
+import auth_info;
 
 // TODO: make sure slash at the end
 const string filesPath = "/home/codemyst/Downloads/";
@@ -24,6 +27,7 @@ void main()
     auto serverSettings = new HTTPServerSettings();
 	serverSettings.bindAddresses = ["127.0.0.1"];
 	serverSettings.port = 5000;
+    serverSettings.sessionStore = new MemorySessionStore();
 
     listenHTTP(serverSettings, router);
 
@@ -63,22 +67,56 @@ FileTree getTree(string path)
     return root;
 }
 
+@requiresAuth
 class IndexWeb
 {
-    @path("/login")
-    public void getLogin()
+    @safe
+    @noRoute
+    AuthInfo authenticate(scope HTTPServerRequest req, scope HTTPServerResponse)
     {
-        render!("login.dt");
+        if (!req.session || !req.session.isKeySet("auth"))
+        {
+            throw new HTTPStatusException(HTTPStatus.forbidden, "Not authorized to perform this action.");
+        }
+
+        return req.session.get!AuthInfo("auth");
     }
 
+    @noAuth
     @path("/login")
-    public void postLogin(string password)
+    public void getLogin(string _error = null)
     {
-        writeln(password);
+        string error = _error;
+        Nullable!AuthInfo auth;
+        render!("login.dt", error, auth);
     }
 
+    @noAuth
+    @errorDisplay!getLogin
+    @path("/login")
+    public void postLogin(ValidUsername username, string password,
+            scope HTTPServerRequest req, scope HTTPServerResponse res)
+    {
+        enforce(username == "codemyst", "invalid username");
+        enforce(password == "epik", "invalid password");
+
+        AuthInfo s = { username: username };
+        req.session = res.startSession();
+        req.session.set("auth", s);
+        redirect("./");
+    }
+
+    @anyAuth
+    @path("/logout")
+    public void getLogout()
+    {
+        terminateSession();
+        redirect("./");
+    }
+
+    @noAuth
     @path("/*")
-    public void get(HTTPServerRequest req, HTTPServerResponse res)
+    public void get(scope HTTPServerRequest req, scope HTTPServerResponse res)
     {
         auto path = req.requestPath.toString();
 
@@ -88,7 +126,13 @@ class IndexWeb
 
         if (tree.isDir)
         {
-            render!("index.dt", tree);
+            Nullable!AuthInfo auth;
+            if (req.session && req.session.isKeySet("auth"))
+            {
+                auth = req.session.get!AuthInfo("auth");
+            }
+
+            render!("index.dt", tree, auth);
         }
         else
         {
