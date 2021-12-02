@@ -108,22 +108,30 @@ table tr td {
     text-align: right;
 }
 
-table .del {
+table .del,
+table .ren {
     opacity: 0;
 }
 
-table tr:hover .del {
+table tr:hover .del,
+table tr:hover .ren {
     opacity: 1;
 }
 
-table .del button {
+table .del button,
+table .ren button {
     cursor: pointer;
     color: var(--color-red);
     background: none;
     border: none;
 }
 
-table .del button:hover {
+table .ren button {
+    color: var(--color-main);
+}
+
+table .del button:hover,
+table .ren button:hover {
     text-decoration: underline;
 }
 
@@ -155,4 +163,13 @@ table th, table td {
 
 .login button:hover {
     color: var(--color-accent);
+}
+
+.upload button {
+    color: var(--color-main);
+    cursor: pointer;
+    border-radius: var(--border-radius);
+    background-color: var(--color-cod-gray-light);
+    border: 2px solid var(--color-mineshaft);
+    padding: 0.25em 0.5em;
 }

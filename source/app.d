@@ -114,7 +114,21 @@ class IndexWeb
         redirect("./");
     }
 
-    @noAuth
+    @anyAuth
+    @path("/upload")
+    public void postUpload(string parent, scope HTTPServerRequest req, scope HTTPServerResponse res)
+    {
+        auto fullParent = chainPath(filesPath, parent[1..$]).array().decodeComponent();
+
+        foreach (file; req.files().byValue())
+        {
+            moveFile(file.tempPath.toString(), chainPath(fullParent, file.filename.name).array(), true);
+        }
+
+        res.redirect(parent);
+    }
+
+    @anyAuth
     @path("/*")
     @method(HTTPMethod.POST)
     public void del(scope HTTPServerRequest req, scope HTTPServerResponse res)

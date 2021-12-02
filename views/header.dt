@@ -3,4 +3,10 @@ header
     - if (auth.isNull)
         a(href="/login") login
     - else
+        - static if (is(typeof(tree)))
+            .upload
+                form(method="post", action="/upload", enctype="multipart/form-data")
+                    input(type="hidden", name="parent", value=tree.path)
+                    input(type="file", name="file", multiple, id="file")
+                    button(type="submit") upload
         a(href="/logout") logout
