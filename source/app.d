@@ -7,15 +7,19 @@ import std.path;
 import std.string;
 import std.uri;
 import std.typecons;
+import std.process;
+import std.conv;
 
 import filetree;
 import auth_info;
 
 // TODO: make sure slash at the end
-const string filesPath = "/home/codemyst/Downloads/";
+string filesPath;
 
 void main()
 {
+    filesPath = environment.get("FILEMYST_PATH");
+
     auto router = new URLRouter();
 
     auto fsettings = new HTTPFileServerSettings();
@@ -26,7 +30,7 @@ void main()
 
     auto serverSettings = new HTTPServerSettings();
 	serverSettings.bindAddresses = ["127.0.0.1"];
-	serverSettings.port = 5000;
+	serverSettings.port = environment.get("FILEMYST_PORT").to!ushort();
     serverSettings.sessionStore = new MemorySessionStore();
 
     listenHTTP(serverSettings, router);
@@ -97,8 +101,8 @@ class IndexWeb
     public void postLogin(ValidUsername username, string password,
             scope HTTPServerRequest req, scope HTTPServerResponse res)
     {
-        enforce(username == "codemyst", "invalid username");
-        enforce(password == "epik", "invalid password");
+        enforce(username == environment.get("FILEMYST_USER"), "invalid username");
+        enforce(password == environment.get("FILEMYST_PASS"), "invalid password");
 
         AuthInfo s = { username: username };
         req.session = res.startSession();

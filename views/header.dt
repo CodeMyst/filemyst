@@ -1,5 +1,5 @@
 header
-    h1 filemyst - web file manager
+    h1 filemyst
     - if (auth.isNull)
         a(href="/login") login
     - else

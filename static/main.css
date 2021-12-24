@@ -49,7 +49,8 @@ header {
 
 h1 {
     letter-spacing: 0.1em;
-    font-size: var(--fontsize-large);
+    font-size: var(--fontsize-medium);
+    font-weight: normal;
 }
 
 a {
