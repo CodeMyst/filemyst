@@ -29,13 +29,13 @@ void main()
     router.registerWebInterface(new IndexWeb());
 
     auto serverSettings = new HTTPServerSettings();
-	serverSettings.bindAddresses = ["127.0.0.1"];
-	serverSettings.port = environment.get("FILEMYST_PORT").to!ushort();
+    serverSettings.bindAddresses = ["0.0.0.0"];
+    serverSettings.port = 5000;
     serverSettings.sessionStore = new MemorySessionStore();
 
     listenHTTP(serverSettings, router);
 
-	runApplication();
+    runApplication();
 }
 
 FileTree getTree(string path)

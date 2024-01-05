@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: ./
+    restart: unless-stopped
+    environment:
+      - FILEMYST_PATH=./files/
+      - FILEMYST_USER=${FILEMYST_USER}
+      - FILEMYST_PASS=${FILEMYST_PASS}
+      - FILEMYST_PORT=${FILEMYST_PORT}
+    volumes:
+      - ${FILEMYST_PATH}:/app/files/
+    ports:
+      - ${FILEMYST_PORT}:5000

@@ -13,3 +13,4 @@ filemyst-test-*
 *.o
 *.obj
 *.lst
+.env
