@@ -13,6 +13,9 @@
 
     const onSubmitClick = () => {
         dispatch('submit');
+    };
+
+    export const close = () => {
         dialog.close();
     };
 </script>

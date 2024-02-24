@@ -17,6 +17,14 @@ User.create(
   password_confirmation: config[:admin_password]
 )
 
+before do
+  headers(
+    {
+      'Access-Control-Allow-Origin' => config[:frontend_url]
+    }
+  )
+end
+
 post '/login' do
   data = JSON.parse(request.body.read, symbolize_names: true)
 
