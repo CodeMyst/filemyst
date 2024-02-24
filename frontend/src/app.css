@@ -56,16 +56,38 @@ button {
   background-color: var(--color-bg1);
   display: flex;
   align-items: center;
-  padding: 0.25rem 0.5rem;
   border-radius: var(--border-radius);
   border: 1px solid var(--color-bg2);
   color: var(--color-fg);
   text-decoration: none;
+  padding: 0.5rem 1rem;
   transition: border-color 0.1s;
 }
 
-button:hover {
+button:hover,
+button:focus{
   background-color: var(--color-bg2);
   border-color: var(--color-bg3);
-  color: var(--color-fg);
+  outline: none;
 }
+
+h1, h3 {
+  margin: 0;
+}
+
+input {
+  background-color: var(--color-bg1);
+  color: var(--color-fg);
+  border: 1px solid var(--color-bg2);
+  transition: border-color 0.1s;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+}
+
+input:hover,
+input:focus {
+  background-color: var(--color-bg2);
+  border-color: var(--color-bg3);
+  outline: none;
+}
+
