@@ -26,6 +26,8 @@ GEM
       ruby2_keywords
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
+    jwt (2.8.0)
+      base64
     mini_portile2 (2.8.5)
     minitest (5.22.2)
     multi_json (1.15.0)
@@ -69,6 +71,7 @@ GEM
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     webrick (1.8.1)
+    yaml (0.3.0)
 
 PLATFORMS
   ruby
@@ -77,6 +80,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord
   bcrypt (~> 3.1)
+  jwt (~> 2.8)
   puma (~> 6.4)
   rackup (~> 2.1)
   rake
@@ -84,6 +88,7 @@ DEPENDENCIES
   sinatra-activerecord
   sinatra-contrib (~> 4.0)
   sqlite3
+  yaml (~> 0.3.0)
 
 BUNDLED WITH
    2.5.6
