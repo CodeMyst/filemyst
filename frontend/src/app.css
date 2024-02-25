@@ -25,10 +25,6 @@
 
   color: var(--color-fg);
   background-color: var(--color-bg);
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
 }
 
 * {
@@ -38,7 +34,7 @@
 body {
   background-color: var(--color-bg);
   color: var(--color-fg);
-  font-family: 'Ubuntu-Mono', sans-serif;
+  font-family: 'Ubuntu Mono', sans-serif;
   font-size: var(--fs-medium);
 }
 
@@ -62,6 +58,7 @@ button {
   text-decoration: none;
   padding: 0.5rem 1rem;
   transition: border-color 0.1s;
+  font-family: 'Ubuntu Mono', sans-serif;
 }
 
 button:hover,
@@ -82,6 +79,7 @@ input {
   transition: border-color 0.1s;
   padding: 0.5rem 1rem;
   border-radius: var(--border-radius);
+  font-family: 'Ubuntu Mono', sans-serif;
 }
 
 input:hover,

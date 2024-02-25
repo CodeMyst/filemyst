@@ -1,3 +1,10 @@
+export interface FileInfo {
+  name: string;
+  size: number;
+  last_modified: string;
+  is_dir: boolean;
+}
+
 export const login = async (username: string, password: string): Promise<boolean> => {
   const res = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
     method: 'post',
@@ -11,3 +18,10 @@ export const login = async (username: string, password: string): Promise<boolean
 
   return res.ok;
 };
+
+export const getFiles = async (basePath: string): Promise<FileInfo[]> => {
+  const res = await fetch(`${import.meta.env.VITE_API_URL}/${basePath}`);
+
+  return await res.json();
+};
+

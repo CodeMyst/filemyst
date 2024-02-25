@@ -2,3 +2,4 @@ jwt_secret: superstrongsecret
 admin_username: admin
 admin_password: superstrongpassword
 frontend_url: http://localhost:5173
+files_path: ~/files
