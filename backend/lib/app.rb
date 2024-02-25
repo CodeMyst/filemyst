@@ -5,6 +5,7 @@ require 'sinatra/json'
 require 'sinatra/activerecord'
 require 'jwt'
 require 'yaml'
+require 'fileutils'
 require_relative 'models'
 
 set :database, { adapter: 'sqlite3', database: 'filemyst.sqlite3' }
@@ -37,6 +38,10 @@ before do
       'Access-Control-Allow-Origin' => config[:frontend_url]
     }
   )
+end
+
+options '/*' do
+  200
 end
 
 post '/login' do
@@ -76,6 +81,23 @@ get '/*' do
 
     json(files)
   else
+    attachment
     send_file file
   end
+end
+
+post '/*' do
+  path = File.join(files_path, params[:splat])
+
+  return 404 unless File.exist?(path) && File.directory?(path)
+
+  files = params[:files]
+
+  files.each do |file|
+    temp_file = file[:tempfile]
+    name = file[:filename]
+    FileUtils.cp(temp_file.path, File.join(path, name))
+  end
+
+  200
 end

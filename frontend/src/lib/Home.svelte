@@ -7,7 +7,7 @@
 </script>
 
 <main>
-    <Header />
+    <Header {basePath} />
 
     {#await getFiles(basePath) then files}
         <Files {files} {basePath} />

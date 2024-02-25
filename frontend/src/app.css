@@ -57,7 +57,7 @@ button {
   color: var(--color-fg);
   text-decoration: none;
   padding: 0.5rem 1rem;
-  transition: border-color 0.1s;
+  transition: all 0.1s;
   font-family: 'Ubuntu Mono', sans-serif;
 }
 
@@ -76,7 +76,7 @@ input {
   background-color: var(--color-bg1);
   color: var(--color-fg);
   border: 1px solid var(--color-bg2);
-  transition: border-color 0.1s;
+  transition: all 0.1s;
   padding: 0.5rem 1rem;
   border-radius: var(--border-radius);
   font-family: 'Ubuntu Mono', sans-serif;
