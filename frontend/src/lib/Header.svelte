@@ -68,7 +68,7 @@
             }
         };
 
-        xhr.upload.onloadend = (e) => {
+        xhr.upload.onloadend = () => {
             uploadInProgress = false;
             uploadModal.close();
             showUploadModal = false;

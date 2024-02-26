@@ -13,8 +13,9 @@ set :database, { adapter: 'sqlite3', database: 'filemyst.sqlite3' }
 config = YAML.load_file('config.yml', symbolize_names: true)
 files_path = File.expand_path(config[:files_path])
 
-# create the files dir if doesn't exist
+# create the files and trash dir if doesn't exist
 Dir.mkdir(files_path) unless Dir.exist?(files_path)
+Dir.mkdir(File.join(files_path, '.trash')) unless Dir.exist?(File.join(files_path, '.trash'))
 
 # create the admin user if doesn't exist
 User.create(
@@ -35,7 +36,9 @@ end
 before do
   headers(
     {
-      'Access-Control-Allow-Origin' => config[:frontend_url]
+      'Access-Control-Allow-Origin' => config[:frontend_url],
+      'Access-Control-Allow-Methods' => %w[GET POST OPTIONS DELETE],
+      'Access-Control-Allow-Headers' => %w[Authorization]
     }
   )
 end
@@ -96,8 +99,36 @@ post '/*' do
   files.each do |file|
     temp_file = file[:tempfile]
     name = file[:filename]
-    FileUtils.cp(temp_file.path, File.join(path, name))
+    FileUtils.mv(temp_file.path, File.join(path, name))
   end
+
+  200
+end
+
+def logged_in?(request, jwt_secret)
+  auth = request.env['HTTP_AUTHORIZATION']
+
+  return false unless auth.present? && auth.start_with?('Bearer ')
+
+  token = auth['Bearer '.length..]
+
+  payload = JWT.decode(token, jwt_secret, true, { algorithm: 'HS256' })
+
+  return false if User.find_by(username: payload.first['username']).nil?
+
+  true
+rescue JWT::DecodeError
+  false
+end
+
+delete '/*' do
+  return 403 unless logged_in?(request, config[:jwt_secret])
+
+  path = File.join(files_path, params[:splat])
+
+  return 404 unless File.exist?(path)
+
+  FileUtils.mv(path, File.join(files_path, '.trash', File.basename(path)))
 
   200
 end

@@ -1,9 +1,19 @@
 <script lang="ts">
     import { Link } from "svelte-routing";
-    import type { FileInfo } from "../api";
+    import { deleteFile, type FileInfo } from "../api";
+    import { loggedInStore } from "../stores";
+    import { onMount } from "svelte";
 
     export let files: FileInfo[];
     export let basePath: string;
+
+    let isLoggedIn = false;
+
+    onMount(() => {
+        loggedInStore.subscribe((value) => {
+            isLoggedIn = value;
+        });
+    });
 
     const formatDate = (dateString: string) => {
         const date = new Date(dateString);
@@ -39,12 +49,27 @@
     const parentDir = (path: string) => {
         return path.split("/").slice(0, -1).join("/");
     };
+
+    const canDeleteFile = (file: string) => {
+        if (basePath.includes('.trash') || file === '.trash') return false;
+
+        return true;
+    };
+
+    const onDelete = async (file: string) => {
+        await deleteFile(basePath + '/' + file);
+
+        files = files.filter(f => f.name !== file);
+    };
 </script>
 
 <div class="index">
     <table>
         <thead>
             <th>name</th>
+            {#if isLoggedIn}
+                <th></th>
+            {/if}
             <th>size</th>
             <th>last modified</th>
         </thead>
@@ -52,6 +77,9 @@
             {#if basePath !== ''}
                 <tr>
                     <td><Link to={parentDir(basePath)} class="dir">../</Link></td>
+                    {#if isLoggedIn}
+                        <td></td>
+                    {/if}
                     <td></td>
                     <td></td>
                 </tr>
@@ -59,10 +87,19 @@
             {#each files as file}
                 <tr>
                     {#if file.is_dir}
-                        <td><Link to={basePath + '/' + file.name} class="dir">{file.name}/</Link></td>
+                        <td><Link to={basePath + '/' + file.name} class="file dir">{file.name}/</Link></td>
                     {:else}
-                        <td><a href={`${import.meta.env.VITE_API_URL}${basePath ? '/' + basePath : ''}/${file.name}`}>{file.name}</a></td>
+                        <td><a class="file" href={`${import.meta.env.VITE_API_URL}${basePath ? '/' + basePath : ''}/${file.name}`}>{file.name}</a></td>
                     {/if}
+
+                    {#if isLoggedIn}
+                        <td>
+                            {#if canDeleteFile(file.name)}
+                                <button class="delete" on:click={() => onDelete(file.name)}>del</button>
+                            {/if}
+                        </td>
+                    {/if}
+
                     <td>{formatSize(file.size)}</td>
                     <td>{formatDate(file.last_modified)}</td>
                 </tr>
@@ -113,6 +150,21 @@
 
     td :global(a:hover) {
         text-decoration: underline;
+    }
+
+    tr:hover .delete {
+        opacity: 1;
+    }
+
+    .delete {
+        opacity: 0;
+        color: var(--color-danger);
+        border: none;
+    }
+
+    .delete:hover {
+        background-color: var(--color-danger);
+        color: var(--color-bg1);
     }
 </style>
 

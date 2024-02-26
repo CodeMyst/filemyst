@@ -25,3 +25,18 @@ export const getFiles = async (basePath: string): Promise<FileInfo[]> => {
   return await res.json();
 };
 
+export const deleteFile = async (path: string) => {
+  const token = localStorage.getItem('filemyst-token');
+
+  if (!token) {
+    return;
+  }
+
+  await fetch(`${import.meta.env.VITE_API_URL}/${path}`, {
+    method: 'delete',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
+};
+
