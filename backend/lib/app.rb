@@ -33,6 +33,22 @@ def get_file_size(path)
   end
 end
 
+def logged_in?(request, jwt_secret)
+  auth = request.env['HTTP_AUTHORIZATION']
+
+  return false unless auth.present? && auth.start_with?('Bearer ')
+
+  token = auth['Bearer '.length..]
+
+  payload = JWT.decode(token, jwt_secret, true, { algorithm: 'HS256' })
+
+  return false if User.find_by(username: payload.first['username']).nil?
+
+  true
+rescue JWT::DecodeError
+  false
+end
+
 before do
   headers(
     {
@@ -90,6 +106,8 @@ get '/*' do
 end
 
 post '/*' do
+  return 403 unless logged_in?(request, config[:jwt_secret])
+
   path = File.join(files_path, params[:splat])
 
   return 404 unless File.exist?(path) && File.directory?(path)
@@ -103,22 +121,6 @@ post '/*' do
   end
 
   200
-end
-
-def logged_in?(request, jwt_secret)
-  auth = request.env['HTTP_AUTHORIZATION']
-
-  return false unless auth.present? && auth.start_with?('Bearer ')
-
-  token = auth['Bearer '.length..]
-
-  payload = JWT.decode(token, jwt_secret, true, { algorithm: 'HS256' })
-
-  return false if User.find_by(username: payload.first['username']).nil?
-
-  true
-rescue JWT::DecodeError
-  false
 end
 
 delete '/*' do
