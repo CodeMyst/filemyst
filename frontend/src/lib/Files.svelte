@@ -1,6 +1,6 @@
 <script lang="ts">
     import { Link } from "svelte-routing";
-    import { deleteFile, type FileInfo } from "../api";
+    import { deleteFile, getFiles, type FileInfo } from "../api";
     import { loggedInStore } from "../stores";
     import { onMount } from "svelte";
 
@@ -9,9 +9,11 @@
 
     let isLoggedIn = false;
 
-    onMount(() => {
-        loggedInStore.subscribe((value) => {
+    onMount(async () => {
+        loggedInStore.subscribe(async (value) => {
             isLoggedIn = value;
+
+            files = await getFiles(basePath);
         });
 
         if (basePath.startsWith('.')) {
@@ -63,7 +65,7 @@
     const onDelete = async (file: string) => {
         await deleteFile(basePath + '/' + file);
 
-        files = files.filter(f => f.name !== file);
+        files = await getFiles(basePath);
     };
 </script>
 

@@ -20,7 +20,13 @@ export const login = async (username: string, password: string): Promise<boolean
 };
 
 export const getFiles = async (basePath: string): Promise<FileInfo[]> => {
-  const res = await fetch(`${import.meta.env.VITE_API_URL}/${basePath}`);
+  const token = localStorage.getItem('filemyst-token');
+
+  const res = await fetch(`${import.meta.env.VITE_API_URL}/${basePath}`, {
+    headers: {
+      ...(token && { 'Authorization': `Bearer ${token}` })
+    }
+  });
 
   return await res.json();
 };

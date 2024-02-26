@@ -83,10 +83,16 @@ get '/*' do
 
   return 404 unless File.exist?(file)
 
+  is_logged_in = logged_in?(request, config[:jwt_secret])
+
   if File.directory?(file)
+    return 403 if file.include?('.trash') && !is_logged_in
+
     dir_entries = Dir.entries(file)
                      .reject { |e| ['.', '..'].include? e }
                      .sort_by { |e| [File.directory?(File.join(file, e)) ? 0 : 1, e] }
+
+    dir_entries.reject! { |e| e.start_with? '.' } unless is_logged_in
 
     files = dir_entries.map do |entry|
       full_path = File.join(file, entry)
