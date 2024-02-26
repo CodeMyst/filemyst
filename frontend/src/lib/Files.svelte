@@ -13,6 +13,10 @@
         loggedInStore.subscribe((value) => {
             isLoggedIn = value;
         });
+
+        if (basePath.startsWith('.')) {
+            basePath = '/' + basePath;
+        }
     });
 
     const formatDate = (dateString: string) => {
