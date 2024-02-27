@@ -76,6 +76,7 @@
 
     const onRenameButton = (file: FileInfo) => {
         currentRenamingFile = file;
+        newFileName = file.name;
         showRenameModal = true;
     };
 
