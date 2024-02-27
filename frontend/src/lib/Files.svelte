@@ -1,13 +1,19 @@
 <script lang="ts">
     import { Link } from "svelte-routing";
-    import { deleteFile, getFiles, type FileInfo } from "../api";
+    import { deleteFile, getFiles, type FileInfo, renameFile } from "../api";
     import { loggedInStore } from "../stores";
     import { onMount } from "svelte";
+    import Modal from "./Modal.svelte";
 
     export let files: FileInfo[];
     export let basePath: string;
 
     let isLoggedIn = false;
+
+    let showRenameModal = false;
+    let renameModal: Modal;
+    let currentRenamingFile: FileInfo;
+    let newFileName: string;
 
     onMount(async () => {
         loggedInStore.subscribe(async (value) => {
@@ -56,7 +62,7 @@
         return path.split("/").slice(0, -1).join("/");
     };
 
-    const canDeleteFile = (file: string) => {
+    const canDeleteOrRenameFile = (file: string) => {
         if (basePath.includes('.trash') || file === '.trash') return false;
 
         return true;
@@ -64,6 +70,19 @@
 
     const onDelete = async (file: string) => {
         await deleteFile(basePath + '/' + file);
+
+        files = await getFiles(basePath);
+    };
+
+    const onRenameButton = (file: FileInfo) => {
+        currentRenamingFile = file;
+        showRenameModal = true;
+    };
+
+    const onRename = async () => {
+        await renameFile(basePath + '/' + currentRenamingFile.name, newFileName);
+        renameModal.close();
+        showRenameModal = false;
 
         files = await getFiles(basePath);
     };
@@ -75,6 +94,7 @@
             <th>name</th>
             {#if isLoggedIn}
                 <th></th>
+                <th></th>
             {/if}
             <th>size</th>
             <th>last modified</th>
@@ -84,6 +104,7 @@
                 <tr>
                     <td><Link to={parentDir(basePath)} class="dir">../</Link></td>
                     {#if isLoggedIn}
+                        <td></td>
                         <td></td>
                     {/if}
                     <td></td>
@@ -100,7 +121,12 @@
 
                     {#if isLoggedIn}
                         <td>
-                            {#if canDeleteFile(file.name)}
+                            {#if canDeleteOrRenameFile(file.name)}
+                                <button class="rename" on:click={() => onRenameButton(file)}>ren</button>
+                            {/if}
+                        </td>
+                        <td>
+                            {#if canDeleteOrRenameFile(file.name)}
                                 <button class="delete" on:click={() => onDelete(file.name)}>del</button>
                             {/if}
                         </td>
@@ -113,6 +139,15 @@
         </tbody>
     </table>
 </div>
+
+{#if isLoggedIn && currentRenamingFile}
+    <Modal bind:this={renameModal} bind:showModal={showRenameModal} title={`rename ${currentRenamingFile.name}`} submitTitle="rename" on:submit={onRename}>
+        <form on:submit|preventDefault={onRename}>
+            <input type="text" placeholder="new name" name="new_name" bind:value={newFileName} />
+            <input type="submit" hidden />
+        </form>
+    </Modal>
+{/if}
 
 <style>
     .index {
@@ -158,18 +193,34 @@
         text-decoration: underline;
     }
 
-    tr:hover .delete {
+    tr:hover .delete,
+    tr:hover .rename {
         opacity: 1;
     }
 
-    .delete {
+    .delete,
+    .rename {
         opacity: 0;
-        color: var(--color-danger);
         border: none;
+        padding: 0.1rem;
+        font-size: var(--fs-small);
+    }
+
+    .delete {
+        color: var(--color-danger);
+    }
+
+    .rename {
+        color: var(--color-primary);
     }
 
     .delete:hover {
         background-color: var(--color-danger);
+        color: var(--color-bg1);
+    }
+
+    .rename:hover {
+        background-color: var(--color-primary);
         color: var(--color-bg1);
     }
 </style>

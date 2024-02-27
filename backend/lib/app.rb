@@ -53,7 +53,7 @@ before do
   headers(
     {
       'Access-Control-Allow-Origin' => config[:frontend_url],
-      'Access-Control-Allow-Methods' => %w[GET POST OPTIONS DELETE],
+      'Access-Control-Allow-Methods' => %w[GET POST OPTIONS DELETE PUT],
       'Access-Control-Allow-Headers' => %w[Authorization]
     }
   )
@@ -78,6 +78,7 @@ post '/login' do
   end
 end
 
+# index of files
 get '/*' do
   file = File.join(files_path, params[:splat])
 
@@ -111,6 +112,7 @@ get '/*' do
   end
 end
 
+# upload files
 post '/*' do
   return 403 unless logged_in?(request, config[:jwt_secret])
 
@@ -129,6 +131,7 @@ post '/*' do
   200
 end
 
+# delete files
 delete '/*' do
   return 403 unless logged_in?(request, config[:jwt_secret])
 
@@ -137,6 +140,26 @@ delete '/*' do
   return 404 unless File.exist?(path)
 
   FileUtils.mv(path, File.join(files_path, '.trash', File.basename(path)))
+
+  200
+end
+
+# rename files
+put '/*' do
+  return 403 unless logged_in?(request, config[:jwt_secret])
+
+  dir = File.dirname(params[:splat].first)
+  new_name = params[:new_name]
+
+  return 400 unless params[:new_name]
+
+  prev_path = File.join(files_path, params[:splat])
+
+  return 404 unless File.exist?(prev_path)
+
+  new_path = File.join(files_path, File.join(dir, new_name))
+
+  FileUtils.mv(prev_path, new_path)
 
   200
 end

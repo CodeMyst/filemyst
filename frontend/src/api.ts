@@ -46,3 +46,17 @@ export const deleteFile = async (path: string) => {
   });
 };
 
+export const renameFile = async (path: string, newName: string) => {
+  const token = localStorage.getItem('filemyst-token');
+
+  if (!token) {
+    return;
+  }
+
+  await fetch(`${import.meta.env.VITE_API_URL}/${path}?new_name=${newName}`, {
+    method: 'put',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
+};
