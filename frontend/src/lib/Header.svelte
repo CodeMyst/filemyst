@@ -75,6 +75,8 @@
             window.location.reload();
         };
 
+        xhr.setRequestHeader('Authorization', `Bearer ${localStorage.getItem('filemyst-token')}`);
+
         xhr.send(formData);
 
         uploadInProgress = true;

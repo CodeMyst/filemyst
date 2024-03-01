@@ -117,7 +117,8 @@
                     {#if file.is_dir}
                         <td><Link to={basePath + '/' + file.name} class="file dir">{file.name}/</Link></td>
                     {:else}
-                        <td><a class="file" href={`${import.meta.env.VITE_API_URL}${basePath ? '/' + basePath : ''}/${file.name}`}>{file.name}</a></td>
+                        <td><Link to={basePath + '/' + file.name} class="file">{file.name}</Link></td>
+                        <!-- <td><a class="file" href={`${import.meta.env.VITE_API_URL}${basePath ? '/' + basePath : ''}/${file.name}`}>{file.name}</a></td> -->
                     {/if}
 
                     {#if isLoggedIn}
