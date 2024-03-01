@@ -1,27 +1,27 @@
 # frozen_string_literal: true
-
+#
+require 'dotenv/load'
 require 'sinatra'
 require 'sinatra/json'
 require 'sinatra/activerecord'
 require 'jwt'
-require 'yaml'
 require 'fileutils'
 require_relative 'models'
 
-set :database, { adapter: 'sqlite3', database: 'filemyst.sqlite3' }
+FILES_PATH = 'files'
 
-config = YAML.load_file('config.yml', symbolize_names: true)
-files_path = File.expand_path(config[:files_path])
+set :database, { adapter: 'sqlite3', database: 'filemyst.sqlite3' }
+set :port, ENV['PORT']
 
 # create the files and trash dir if doesn't exist
-Dir.mkdir(files_path) unless Dir.exist?(files_path)
-Dir.mkdir(File.join(files_path, '.trash')) unless Dir.exist?(File.join(files_path, '.trash'))
+Dir.mkdir(FILES_PATH) unless Dir.exist?(FILES_PATH)
+Dir.mkdir(File.join(FILES_PATH, '.trash')) unless Dir.exist?(File.join(FILES_PATH, '.trash'))
 
 # create the admin user if doesn't exist
 User.create(
-  username: config[:admin_username],
-  password: config[:admin_password],
-  password_confirmation: config[:admin_password]
+  username: ENV['ADMIN_USERNAME'],
+  password: ENV['ADMIN_PASSWORD'],
+  password_confirmation: ENV['ADMIN_PASSWORD']
 )
 
 # returns the file size of a file or a directory, it it's a directory it recurses the contents
@@ -52,7 +52,7 @@ end
 before do
   headers(
     {
-      'Access-Control-Allow-Origin' => config[:frontend_url],
+      'Access-Control-Allow-Origin' => ENV['FRONTEND_URL'],
       'Access-Control-Allow-Methods' => %w[GET POST OPTIONS DELETE PUT],
       'Access-Control-Allow-Headers' => %w[Authorization]
     }
@@ -70,7 +70,7 @@ post '/login' do
 
   if user&.authenticate(data[:password])
     payload = { username: user.username }
-    token = JWT.encode(payload, config[:jwt_secret], 'HS256')
+    token = JWT.encode(payload, ENV['JWT_SECRET'], 'HS256')
 
     json({ access_token: token })
   else
@@ -80,11 +80,11 @@ end
 
 # index of files
 get '/*' do
-  file = File.join(files_path, params[:splat])
+  file = File.join(FILES_PATH, params[:splat])
 
   return 404 unless File.exist?(file)
 
-  is_logged_in = logged_in?(request, config[:jwt_secret])
+  is_logged_in = logged_in?(request, ENV['JWT_SECRET'])
 
   if File.directory?(file)
     return 403 if file.include?('.trash') && !is_logged_in
@@ -114,9 +114,9 @@ end
 
 # upload files
 post '/*' do
-  return 403 unless logged_in?(request, config[:jwt_secret])
+  return 403 unless logged_in?(request, ENV['JWT_SECRET'])
 
-  path = File.join(files_path, params[:splat])
+  path = File.join(FILES_PATH, params[:splat])
 
   return 404 unless File.exist?(path) && File.directory?(path)
 
@@ -133,31 +133,31 @@ end
 
 # delete files
 delete '/*' do
-  return 403 unless logged_in?(request, config[:jwt_secret])
+  return 403 unless logged_in?(request, ENV['JWT_SECRET'])
 
-  path = File.join(files_path, params[:splat])
+  path = File.join(FILES_PATH, params[:splat])
 
   return 404 unless File.exist?(path)
 
-  FileUtils.mv(path, File.join(files_path, '.trash', File.basename(path)))
+  FileUtils.mv(path, File.join(FILES_PATH, '.trash', File.basename(path)))
 
   200
 end
 
 # rename files
 put '/*' do
-  return 403 unless logged_in?(request, config[:jwt_secret])
+  return 403 unless logged_in?(request, ENV['JWT_SECRET'])
 
   dir = File.dirname(params[:splat].first)
   new_name = params[:new_name]
 
   return 400 unless params[:new_name]
 
-  prev_path = File.join(files_path, params[:splat])
+  prev_path = File.join(FILES_PATH, params[:splat])
 
   return 404 unless File.exist?(prev_path)
 
-  new_path = File.join(files_path, File.join(dir, new_name))
+  new_path = File.join(FILES_PATH, File.join(dir, new_name))
 
   FileUtils.mv(prev_path, new_path)
 

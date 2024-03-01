@@ -1,2 +1,3 @@
 filemyst.sqlite3*
-config.yml
+.env
+files/
