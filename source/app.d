@@ -31,7 +31,7 @@ void main()
     auto serverSettings = new HTTPServerSettings();
     serverSettings.bindAddresses = ["0.0.0.0"];
     serverSettings.port = 5000;
-    settings.maxRequestSize = -1;
+    serverSettings.maxRequestSize = -1;
     serverSettings.sessionStore = new MemorySessionStore();
 
     listenHTTP(serverSettings, router);
