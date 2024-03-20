@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   app:
+    pull_policy: build
     build:
       context: ./
     restart: unless-stopped
