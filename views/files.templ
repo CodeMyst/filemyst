@@ -1,0 +1,81 @@
+package views
+
+import "filemyst/files"
+import "strings"
+import "path/filepath"
+import "github.com/dustin/go-humanize"
+
+func fileName(file files.FileEntry) string {
+    suffix := ""
+    if file.IsDir {
+        suffix = "/"
+    }
+    return file.Name + suffix
+}
+
+templ Files(basePath string, fileList []files.FileEntry, loggedIn bool) {
+    <div class="index">
+        <table>
+            <thead>
+                <th>name</th>
+                if loggedIn {
+                    <th></th>
+                    <th></th>
+                }
+                <th>size</th>
+                <th>last modified</th>
+            </thead>
+
+            <tbody>
+                if basePath != "" {
+                    <tr>
+                        <td>
+                            <a href={templ.SafeURL(basePath + "/..")} class="file dir">../</a>
+                        </td>
+
+                        if loggedIn {
+                            <td></td>
+                            <td></td>
+                        }
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+                }
+
+                for _, file := range fileList {
+                    <tr>
+                        <td>
+                            <a
+                               href={templ.SafeURL(filepath.Join(basePath, file.Name))}
+                               if file.IsDir {
+                                   class="file dir"
+                               } else {
+                                   class="file"
+                               }
+                           >
+                                { fileName(file) }
+                            </a>
+                        </td>
+
+                        if loggedIn {
+                            <td>
+                                if file.Name != ".trash" {
+                                    <button class="rename" hx-patch={filepath.Join(basePath, file.Name)} hx-prompt={"rename " + file.Name + " to:"}>ren</button>
+                                }
+                            </td>
+                            <td>
+                                if file.Name != ".trash" {
+                                    <button class="delete" hx-delete={filepath.Join(basePath, file.Name)} hx-confirm={"are you sure you want to delete " + file.Name + " ?"}>del</button>
+                                }
+                            </td>
+                        }
+
+                        <td>{ strings.ReplaceAll(strings.ToLower(humanize.Bytes(file.Size)), " ", "") }</td>
+                        <td>{ strings.ToLower(file.LastModified.Format("02-Jan-2006 15:04:05")) }</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

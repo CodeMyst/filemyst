@@ -1,0 +1,24 @@
+package views
+
+templ Header(loggedIn bool) {
+	<header>
+		<h1>filemyst</h1>
+
+		<div class="buttons">
+			if loggedIn {
+				<button id="upload-button">upload</button>
+				<button id="logout-button" hx-post="/logout">logout</button>
+			} else {
+				<button id="login-button">login</button>
+			}
+		</div>
+	</header>
+
+	<dialog id="login-dialog">
+		@LoginModal(false)
+	</dialog>
+
+	<dialog id="upload-dialog">
+		@UploadModal()
+	</dialog>
+}

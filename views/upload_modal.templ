@@ -1,0 +1,18 @@
+package views
+
+templ UploadModal() {
+    <h3>upload</h3>
+
+    <form id="upload-form" hx-encoding="multipart/form-data" hx-post="?" hx-swap="none">
+        <input type="file" name="files" id="files" multiple />
+
+	<div class="progress">
+	  <div id="progress-bar" class="progress-bar" style="width: 0%"></div>
+	</div>
+
+	<div class="buttons">
+	    <input type="submit" value="upload">
+	    <button class="close">close</button>
+	</div>
+    </form>
+}

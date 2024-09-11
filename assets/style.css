@@ -1,0 +1,270 @@
+:root {
+  --color-bg: #141414;
+  --color-bg1: #1c1c1c;
+  --color-bg2: #222222;
+  --color-bg3: #777777;
+
+  --color-fg: #cccccc;
+
+  --color-primary: #ee720d;
+  --color-secondary: #1eaedb;
+
+  --color-danger: #ff4c4c;
+  --color-success: #2ec933;
+  --color-pink: #cb6dce;
+
+  --border-radius: 0.2rem;
+
+  --fs-small: 0.9rem;
+  --fs-normal: 1rem;
+  --fs-medium: 1.2rem;
+  --fs-large: 1.5rem;
+
+  line-height: 1.5;
+  font-weight: 400;
+
+  color: var(--color-fg);
+  background-color: var(--color-bg);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-fg);
+  font-family: 'Ubuntu Mono', sans-serif;
+  font-size: var(--fs-medium);
+}
+
+main {
+  max-width: 90%;
+  width: 960px;
+  margin: 0 auto;
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+}
+
+button {
+  cursor: pointer;
+  background-color: var(--color-bg1);
+  display: flex;
+  align-items: center;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-bg2);
+  color: var(--color-fg);
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  transition: all 0.1s;
+  font-family: 'Ubuntu Mono', sans-serif;
+}
+
+button:hover,
+button:focus{
+  background-color: var(--color-bg2);
+  border-color: var(--color-bg3);
+  outline: none;
+}
+
+h1, h3 {
+  margin: 0;
+}
+
+input {
+  background-color: var(--color-bg1);
+  color: var(--color-fg);
+  border: 1px solid var(--color-bg2);
+  transition: all 0.1s;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  font-family: 'Ubuntu Mono', sans-serif;
+}
+
+input:hover,
+input:focus {
+  background-color: var(--color-bg2);
+  border-color: var(--color-bg3);
+  outline: none;
+}
+
+input[type="submit"] {
+  cursor: pointer;
+}
+
+header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+header .buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+h1 {
+  font-size: var(--fs-large);
+  font-weight: normal;
+  margin: 0;
+}
+
+hr {
+  width: 100%;
+  border: 1px solid var(--color-bg2);
+  margin-top: 2rem;
+}
+
+footer {
+  display: flex;
+  justify-content: space-between;
+}
+
+footer p {
+  font-size: var(--fs-small);
+  margin: 0;
+}
+
+footer a {
+  color: var(--color-primary);
+  transition: color 0.1s;
+}
+
+footer a:hover {
+  color: var(--color-secondary);
+}
+
+dialog {
+  width: 20rem;
+  max-width: 32em;
+  border-radius: var(--border-radius);
+  padding: 1rem;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-bg1);
+  color: var(--color-fg);
+}
+
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+dialog h3 {
+  margin-bottom: 1rem;
+}
+
+dialog button {
+  display: block;
+}
+
+dialog .buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+dialog form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+dialog .invalid {
+  background-color: var(--color-danger);
+  font-size: var(--fs-small);
+  color: var(--color-bg);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--border-radius);
+}
+
+.index {
+  background-color: var(--color-bg1);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-bg2);
+  margin-top: 1rem;
+}
+
+.index table {
+  width: 100%;
+  border-spacing: 0;
+  border-collapse: collapse;
+  font-size: var(--fs-normal);
+}
+
+.index thead {
+  border-bottom: 1px solid var(--color-bg2);
+}
+
+.index th, td {
+  padding: 0.25rem 0.5rem;
+  text-align: right;
+  font-weight: normal;
+}
+
+.index td:first-child, .index th:first-child {
+  text-align: left;
+  width: auto;
+}
+
+.index td a {
+  display: block;
+  color: var(--color-fg);
+  text-decoration: none;
+}
+
+.index td a.dir {
+  color: var(--color-secondary);
+}
+
+.index td a:hover {
+  text-decoration: underline;
+}
+
+.index tr:hover .delete,
+.index tr:hover .rename {
+  opacity: 1;
+}
+
+.index .delete,
+.index .rename {
+  opacity: 0;
+  border: none;
+  padding: 0.1rem;
+  font-size: var(--fs-small);
+}
+
+.index .delete {
+  color: var(--color-danger);
+}
+
+.index .rename {
+  color: var(--color-primary);
+}
+
+.index .delete:hover {
+  background-color: var(--color-danger);
+  color: var(--color-bg1);
+}
+
+.index .rename:hover {
+  background-color: var(--color-primary);
+  color: var(--color-bg1);
+}
+
+.progress {
+  background-color: var(--color-bg1);
+  border: 1px solid var(--color-bg2);
+  height: 1rem;
+  width: 100%;
+  border-radius: var(--border-radius);
+  margin-top: 0.5rem;
+}
+
+.progress-bar {
+  background-color: var(--color-success);
+  height: 100%;
+  width: 0%;
+  transition: width 0.25s;
+  border-radius: var(--border-radius);
+}
+
