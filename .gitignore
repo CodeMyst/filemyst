@@ -1,2 +1,4 @@
 .env
 filemyst.db
+db/filemyst.db
+tmp/

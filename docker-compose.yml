@@ -1,0 +1,19 @@
+services:
+  app:
+    pull_policy: build
+    build:
+      context: .
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT}:8080"
+    volumes:
+      - sqlite-db:/app/db/
+      - ${FILES_PATH}:/app/files
+    environment:
+      - ADMIN_USERNAME=${ADMIN_USERNAME}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - FILES_PATH=./files/
+      - SECURE=${SECURE}
+
+volumes:
+  sqlite-db:

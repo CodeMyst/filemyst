@@ -346,12 +346,12 @@ func handleRename(c echo.Context) error {
 }
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		panic(err)
-	}
+	godotenv.Load()
 
-	db, err = sql.Open("sqlite3", "./filemyst.db")
+	os.Create("./db/filemyst.db")
+
+	var err error
+	db, err = sql.Open("sqlite3", "./db/filemyst.db")
 	if err != nil {
 		panic(err)
 	}
