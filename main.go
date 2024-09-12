@@ -78,6 +78,10 @@ func handleIndex(c echo.Context) error {
 
 	loggedIn, _ := sess.Values["loggedIn"].(bool)
 
+	if !loggedIn && strings.HasPrefix(path, ".trash") {
+		return c.NoContent(http.StatusNotFound)
+	}
+
 	filesPath := filepath.Join(files.GetFilesPath(), path)
 
 	// if the path is a file, return it
