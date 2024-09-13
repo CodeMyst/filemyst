@@ -1,0 +1,33 @@
+package views
+
+import (
+	"filemyst/files"
+)
+
+templ Index(loggedIn bool, basePath string, files []files.FileEntry) {
+	<!doctype html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8" />
+			<link rel="icon" type="image/svg+xml" href="/vite.svg" />
+			<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+			<title>filemyst</title>
+			<link rel="preconnect" href="https://fonts.googleapis.com">
+			<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+			<link href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+			<link rel="stylesheet" href="/assets/style.css" />
+			<script src="https://unpkg.com/htmx.org@2.0.2" />
+		</head>
+		<body>
+			<main>
+				@Header(loggedIn)
+
+				@Files(basePath, files, loggedIn)
+
+				@Footer()
+			</main>
+
+			<script src="/assets/script.js" />
+		</body>
+	</html>
+}
