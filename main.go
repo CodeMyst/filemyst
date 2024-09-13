@@ -92,6 +92,11 @@ func handleIndex(c echo.Context) error {
 
 	if !fileInfo.IsDir() {
 		return c.File(filesPath)
+	} else {
+		// if the path is a directory, redirect to the directory with a trailing slash
+		if !strings.HasSuffix(c.Request().URL.String(), "/") {
+			return c.Redirect(http.StatusMovedPermanently, c.Request().URL.String()+"/")
+		}
 	}
 
 	filesDir, err := os.ReadDir(filesPath)

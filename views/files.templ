@@ -30,7 +30,7 @@ templ Files(basePath string, fileList []files.FileEntry, loggedIn bool) {
                 if basePath != "" {
                     <tr>
                         <td>
-                            <a href={templ.SafeURL(basePath + "/..")} class="file dir">../</a>
+                            <a href={templ.SafeURL("..")} class="file dir">../</a>
                         </td>
 
                         if loggedIn {
@@ -47,7 +47,7 @@ templ Files(basePath string, fileList []files.FileEntry, loggedIn bool) {
                     <tr>
                         <td>
                             <a
-                               href={templ.SafeURL(filepath.Join(basePath, file.Name))}
+                               href={templ.SafeURL(fileName(file))}
                                if file.IsDir {
                                    class="file dir"
                                } else {

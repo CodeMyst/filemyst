@@ -12,7 +12,7 @@ require (
 )
 
 require (
-	github.com/a-h/templ v0.2.771 // indirect
+	github.com/a-h/templ v0.2.778 // indirect
 	github.com/gorilla/securecookie v1.1.2 // indirect
 	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/labstack/echo-contrib v0.17.1
