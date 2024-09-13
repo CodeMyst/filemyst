@@ -84,7 +84,10 @@ func handleIndex(c echo.Context) error {
 
 	filesPath := filepath.Join(files.GetFilesPath(), path)
 
-	// if the path is a file, return it
+	if _, err := os.Stat(filesPath); os.IsNotExist(err) {
+		return c.NoContent(http.StatusNotFound)
+	}
+
 	fileInfo, err := os.Stat(filesPath)
 	if err != nil {
 		return err
