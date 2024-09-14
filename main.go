@@ -126,7 +126,8 @@ func handleIndex(c echo.Context) error {
 			IsDir:        fileInfo.IsDir(),
 		}
 
-		if !loggedIn && fileEntry.Name == ".trash" {
+		// if not logged in, don't show hidden files
+		if !loggedIn && strings.HasPrefix(fileEntry.Name, ".") {
 			continue
 		}
 
