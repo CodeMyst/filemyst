@@ -37,7 +37,7 @@ func Index(loggedIn bool, basePath string, files []files.FileEntry) templ.Compon
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = Header(loggedIn).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = Header(loggedIn, basePath).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

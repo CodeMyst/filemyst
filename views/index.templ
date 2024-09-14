@@ -20,7 +20,7 @@ templ Index(loggedIn bool, basePath string, files []files.FileEntry) {
 		</head>
 		<body>
 			<main>
-				@Header(loggedIn)
+				@Header(loggedIn, basePath)
 
 				@Files(basePath, files, loggedIn)
 

@@ -358,6 +358,33 @@ func handleRename(c echo.Context) error {
 	return c.NoContent(http.StatusOK)
 }
 
+func handleMkdir(c echo.Context) error {
+	path := c.Param("*")
+
+	sess, err := session.Get("filemyst-session", c)
+	if err != nil {
+		return err
+	}
+
+	loggedIn, _ := sess.Values["loggedIn"].(bool)
+	if !loggedIn {
+		return c.NoContent(http.StatusUnauthorized)
+	}
+
+	filesPath := filepath.Join(files.GetFilesPath(), path)
+
+	newDir := c.Request().Header.Get("HX-Prompt")
+
+	err = os.Mkdir(filepath.Join(filesPath, newDir), 0755)
+	if err != nil {
+		return err
+	}
+
+	c.Response().Header().Set("HX-Refresh", "true")
+
+	return c.NoContent(http.StatusOK)
+}
+
 func main() {
 	godotenv.Load()
 
@@ -406,6 +433,7 @@ func main() {
 
 	e.GET("/*", handleIndex)
 	e.POST("/*", handleUpload)
+	e.POST("/mkdir/*", handleMkdir)
 	e.DELETE("/*", handleDelete)
 	e.PATCH("/*", handleRename)
 	e.POST("/login", handleLogin)

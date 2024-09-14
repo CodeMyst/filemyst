@@ -1,12 +1,13 @@
 package views
 
-templ Header(loggedIn bool) {
+templ Header(loggedIn bool, basePath string) {
 	<header>
 		<h1>filemyst</h1>
 
 		<div class="buttons">
 			if loggedIn {
 				<button id="upload-button">upload</button>
+				<button id="mkdir-button" hx-post={"/mkdir/" + basePath} hx-prompt="create a new directory">mkdir</button>
 				<button id="logout-button" hx-post="/logout">logout</button>
 			} else {
 				<button id="login-button">login</button>
