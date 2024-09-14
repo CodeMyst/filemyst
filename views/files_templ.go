@@ -134,9 +134,9 @@ func Files(basePath string, fileList []files.FileEntry, loggedIn bool) templ.Com
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var5 string
-					templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(filepath.Join(basePath, file.Name))
+					templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs("/" + filepath.Join(basePath, file.Name))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/files.templ`, Line: 64, Col: 103}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/files.templ`, Line: 64, Col: 109}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 					if templ_7745c5c3_Err != nil {
@@ -149,7 +149,7 @@ func Files(basePath string, fileList []files.FileEntry, loggedIn bool) templ.Com
 					var templ_7745c5c3_Var6 string
 					templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs("rename " + file.Name + " to:")
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/files.templ`, Line: 64, Col: 146}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/files.templ`, Line: 64, Col: 152}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 					if templ_7745c5c3_Err != nil {
@@ -170,9 +170,9 @@ func Files(basePath string, fileList []files.FileEntry, loggedIn bool) templ.Com
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var7 string
-					templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(filepath.Join(basePath, file.Name))
+					templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs("/" + filepath.Join(basePath, file.Name))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/files.templ`, Line: 69, Col: 104}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/files.templ`, Line: 69, Col: 110}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 					if templ_7745c5c3_Err != nil {
@@ -185,7 +185,7 @@ func Files(basePath string, fileList []files.FileEntry, loggedIn bool) templ.Com
 					var templ_7745c5c3_Var8 string
 					templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs("are you sure you want to delete " + file.Name + " ?")
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/files.templ`, Line: 69, Col: 171}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/files.templ`, Line: 69, Col: 177}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 					if templ_7745c5c3_Err != nil {

@@ -61,12 +61,12 @@ templ Files(basePath string, fileList []files.FileEntry, loggedIn bool) {
                         if loggedIn {
                             <td>
                                 if file.Name != ".trash" {
-                                    <button class="rename" hx-patch={filepath.Join(basePath, file.Name)} hx-prompt={"rename " + file.Name + " to:"}>ren</button>
+                                    <button class="rename" hx-patch={"/" + filepath.Join(basePath, file.Name)} hx-prompt={"rename " + file.Name + " to:"}>ren</button>
                                 }
                             </td>
                             <td>
                                 if file.Name != ".trash" {
-                                    <button class="delete" hx-delete={filepath.Join(basePath, file.Name)} hx-confirm={"are you sure you want to delete " + file.Name + " ?"}>del</button>
+                                    <button class="delete" hx-delete={"/" + filepath.Join(basePath, file.Name)} hx-confirm={"are you sure you want to delete " + file.Name + " ?"}>del</button>
                                 }
                             </td>
                         }
