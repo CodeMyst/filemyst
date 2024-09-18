@@ -11,5 +11,6 @@ List of features:
 - path based navigation (file and directory paths correspond to those on the actual disk)
 - downloading directories as zip
 - files beginning with a '.' will be hidden from the index unless logged in (but still directly downloadable)
+- creating new directories
 
 <img width="996" alt="image" src="https://github.com/user-attachments/assets/436fdae2-5734-418b-aa4e-0f59b0271025">
