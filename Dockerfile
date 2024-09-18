@@ -5,6 +5,7 @@ WORKDIR /app
 COPY go.mod go.sum ./
 
 RUN apk add build-base
+RUN apk add zip
 
 RUN go mod download
 

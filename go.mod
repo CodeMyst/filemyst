@@ -7,6 +7,7 @@ require github.com/gorilla/sessions v1.4.0
 require (
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
+	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/context v1.1.2 // indirect
 	golang.org/x/time v0.5.0 // indirect
 )

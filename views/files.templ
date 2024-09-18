@@ -22,6 +22,7 @@ templ Files(basePath string, fileList []files.FileEntry, loggedIn bool) {
                     <th></th>
                     <th></th>
                 }
+			    <th></th>
                 <th>size</th>
                 <th>last modified</th>
             </thead>
@@ -38,6 +39,7 @@ templ Files(basePath string, fileList []files.FileEntry, loggedIn bool) {
                             <td></td>
                         }
 
+						<th></th>
                         <td></td>
                         <td></td>
                     </tr>
@@ -71,6 +73,11 @@ templ Files(basePath string, fileList []files.FileEntry, loggedIn bool) {
                             </td>
                         }
 
+						if file.IsDir {
+							<td><a class="zip" href={templ.SafeURL(strings.TrimSuffix(fileName(file), "/") + ".zip")}>zip</a></td>
+						} else {
+						    <td></td>
+						}
                         <td>{ strings.ReplaceAll(strings.ToLower(humanize.Bytes(file.Size)), " ", "") }</td>
                         <td>{ strings.ToLower(file.LastModified.Format("02-Jan-2006 15:04:05")) }</td>
                     </tr>

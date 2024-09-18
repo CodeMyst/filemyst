@@ -8,11 +8,13 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"sort"
 	"strconv"
 	"strings"
 
+	"github.com/google/uuid"
 	"github.com/gorilla/sessions"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo-contrib/session"
@@ -71,6 +73,12 @@ func setupAdminUser() error {
 func handleIndex(c echo.Context) error {
 	path := c.Param("*")
 
+	isZip := false
+	if strings.HasSuffix(path, ".zip") {
+		path = strings.TrimSuffix(path, ".zip")
+		isZip = true
+	}
+
 	sess, err := session.Get("filemyst-session", c)
 	if err != nil {
 		return err
@@ -95,11 +103,35 @@ func handleIndex(c echo.Context) error {
 
 	if !fileInfo.IsDir() {
 		return c.File(filesPath)
-	} else {
+	} else if !isZip {
 		// if the path is a directory, redirect to the directory with a trailing slash
 		if !strings.HasSuffix(c.Request().URL.String(), "/") {
 			return c.Redirect(http.StatusMovedPermanently, c.Request().URL.String()+"/")
 		}
+	}
+
+	// file is a dir and requested .zip, download the dir as zip
+	if isZip {
+		uuid := uuid.New().String()
+		randomZipPath := filepath.Join(os.TempDir(), "filemyst-"+uuid+".zip")
+
+		cmd := exec.Command("zip", "-r", randomZipPath, filepath.Base(filesPath))
+		cmd.Dir = filepath.Dir(filesPath)
+		err := cmd.Run()
+		if err != nil {
+			return err
+		}
+
+		// delete the zip file after the request is done
+		go func() {
+			<-c.Request().Context().Done()
+			err := os.Remove(randomZipPath)
+			if err != nil {
+				panic(err)
+			}
+		}()
+
+		return c.File(randomZipPath)
 	}
 
 	filesDir, err := os.ReadDir(filesPath)

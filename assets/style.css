@@ -47,7 +47,8 @@ main {
   flex-direction: column;
 }
 
-button {
+button,
+.zip {
   cursor: pointer;
   background-color: var(--color-bg1);
   display: flex;
@@ -62,7 +63,8 @@ button {
 }
 
 button:hover,
-button:focus{
+button:focus,
+.zip:hover {
   background-color: var(--color-bg2);
   border-color: var(--color-bg3);
   outline: none;
@@ -220,13 +222,25 @@ dialog .invalid {
   text-decoration: underline;
 }
 
+.index .zip {
+  display: flex;
+  width: fit-content;
+  height: fit-content;
+}
+
+.index .zip:hover {
+  text-decoration: none;
+}
+
 .index tr:hover .delete,
-.index tr:hover .rename {
+.index tr:hover .rename,
+.index tr:hover .zip {
   opacity: 1;
 }
 
 .index .delete,
-.index .rename {
+.index .rename,
+.index .zip {
   opacity: 0;
   border: none;
   padding: 0.1rem;
