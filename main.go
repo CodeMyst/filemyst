@@ -325,18 +325,33 @@ func handleDelete(c echo.Context) error {
 
 	filesPath := filepath.Join(files.GetFilesPath(), path)
 
+	// if the path is inside the .trash, delete it permanently
 	if strings.HasPrefix(path, ".trash") {
 		err = os.RemoveAll(filesPath)
 		if err != nil {
 			return err
 		}
 	} else {
+		// otherwise, move it to the .trash
 		trashPath := filepath.Join(files.GetFilesPath(), ".trash")
 
 		err = os.Rename(filesPath, filepath.Join(trashPath, filepath.Base(filesPath)))
 		if err != nil {
 			return err
 		}
+	}
+
+	// emptying the trash, recreate the .trash directory and redirect to root
+	if path == ".trash" {
+		trashPath := filepath.Join(files.GetFilesPath(), ".trash")
+		err = os.Mkdir(trashPath, 0755)
+		if err != nil {
+			return err
+		}
+
+		c.Response().Header().Set("HX-Redirect", "/")
+
+		return c.NoContent(http.StatusOK)
 	}
 
 	c.Response().Header().Set("HX-Refresh", "true")

@@ -70,6 +70,10 @@ button:focus,
   outline: none;
 }
 
+#trash-button {
+  color: var(--color-danger);
+}
+
 h1, h3 {
   margin: 0;
 }

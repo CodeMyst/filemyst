@@ -34,14 +34,24 @@ func Header(loggedIn bool, basePath string) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		if loggedIn {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button id=\"upload-button\">upload</button> <button id=\"mkdir-button\" hx-post=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button id=\"upload-button\">upload</button> ")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			if basePath == ".trash/" {
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button id=\"trash-button\" hx-delete=\"/.trash\" hx-confirm=\"are you sure you want to empty the trash?\">empty</button>")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <button id=\"mkdir-button\" hx-post=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var2 string
 			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs("/mkdir/" + basePath)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/header.templ`, Line: 10, Col: 59}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/header.templ`, Line: 13, Col: 59}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 			if templ_7745c5c3_Err != nil {
